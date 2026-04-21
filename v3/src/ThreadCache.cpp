@@ -21,7 +21,6 @@ void* ThreadCache::allocate(size_t size)
     size_t index = SizeClass::getIndex(size);
 
     // 更新自由链表大小
-    //freeListSize_[index]--;
 
     // 检查线程本地自由链表
     // 如果 freeList_[index] 不为空，表示该链表中有可用内存块
@@ -96,7 +95,7 @@ void ThreadCache::returnToCentralCache(void* start, size_t size)
     size_t index = SizeClass::getIndex(size);
 
     // 获取对齐后的实际块大小
-    size_t alignedSize = SizeClass::roundUp(size);
+    //size_t alignedSize = SizeClass::roundUp(size);
 
     // 计算要归还内存块数量
     size_t batchNum = freeListSize_[index];
@@ -136,7 +135,7 @@ void ThreadCache::returnToCentralCache(void* start, size_t size)
         // 将剩余部分返回给CentralCache
         if (returnNum > 0 && nextNode != nullptr)
         {
-            CentralCache::getInstance().returnRange(nextNode, returnNum * alignedSize, index);
+            CentralCache::getInstance().returnRange(nextNode, returnNum, index);
         }
     }
 }
